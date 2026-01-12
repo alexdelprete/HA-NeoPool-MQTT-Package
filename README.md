@@ -1,8 +1,6 @@
 # HA-NeoPool-MQTT
 
-[![GitHub Repository][repo-shield]][repo]
-[![BuyMeCoffee][buymecoffee-shield]][buymecoffee]
-[![Community Forum][forum-shield]][forum]
+[![GitHub Repository][repo-shield]][repo][![BuyMeCoffee][buymecoffee-shield]][buymecoffee][![Community Forum][forum-shield]][forum]
 
 Home Assistant MQTT integration for Tasmota NeoPool module (ESP32 and ESP8266 devices).
 
@@ -83,6 +81,7 @@ This ports looks like this one (pic taken from a Hayward device) and thats how p
     ```
 
     _Configure user template for GPIO definition based on device type_
+   
     Atom Lite + Tail485 (GPIO26: NeoPool TX / GPIO32: NeoPool RX)
 
     ```console
@@ -95,10 +94,16 @@ This ports looks like this one (pic taken from a Hayward device) and thats how p
     Template {"NAME":"NeoPool Atom Lite + Atomic RS485 Base","GPIO":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6976,0,0,7008,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"FLAG":0,"BASE":1}
     ```
 
-    AtomS3 Lite + Atomic RS485 Base (GPIO19: NeoPool TX - GPIO22: NeoPool RX)
+    AtomS3 Lite + Tail485 (GPIO2: NeoPool TX - GPIO1: NeoPool RX)
 
     ```console
-    Template {"NAME":"NeoPool AtomS3 Lite + Atomic RS485 Base","GPIO":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6976,0,0,7008,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"FLAG":0,"BASE":1}
+   Template {“NAME”:“AtomS3 Lite + Tail485”,“GPIO”:[0,7008,6976,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],“FLAG”:0,“BASE”:1}
+    ```
+
+    AtomS3 Lite + Atomic RS485 Base (GPIO6: NeoPool TX - GPIO5: NeoPool RX)
+
+    ```console
+    Template {“NAME”:“NeoPool AtomS3 Lite + Atomic RS485 Base”,“GPIO”:[0,0,0,0,0,7008,6976,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],“FLAG”:0,“BASE”:1}
     ```
 
     Other ESP32/ESP8266 devices (GPIO3: NeoPool TX - GPIO1: NeoPool RX):
@@ -113,48 +118,10 @@ This ports looks like this one (pic taken from a Hayward device) and thats how p
     Backlog Rule1 4;Rule1 1; Module 0;
     ```
 
-2. **Home Assistant**  
+3. **Home Assistant**  
    Add the [Home Assistant MQTT integration](https://www.home-assistant.io/integrations/mqtt/) properly configured and working.
-3. **Tasmota**
-
-    Configure MQTT broker in your Tasmota SmartPool.
-
-    1. Access the web interface by pointing your browser to its IP. You can find it out in your router or by discovering.
-
-    2. Click in the `Configuration` menu option:
-
-        ![tasmota main menu](images/image-2.png)
-    
-    3. Click in the `Configure MQTT` option:
-
-        ![tasmota configuration menu](images/image-3.png)
-    
-    4. Fill in required data. Mandatory field is `Host`, but having `user` and `password` protection is a **great** idea.
-
-        ![tasmota mqtt configuration form](images/image-4.png)
-    
-      If you are using the Mosquitto addon in HAOS, the IP is the same of your HA server and you can create a new user directly in HA going to `Settings > People > User's tab > + Add new user`. It is recommended to **remove the "Admin" access** and make it **local access only**.
 4. **Home Assistant**  
-   Add `ha_neopool_mqtt_package.yaml` as [Home Assistant package](https://www.home-assistant.io/docs/configuration/packages/). Check [HA docs]((https://www.home-assistant.io/docs/configuration/packages/)) on how to configure HA for package usage.
-
-   Simpler way is to use the Studio Code Server o Terminal addons in HA and follow these steps:
-   
-   1. Create a directory called `packages` inside your `config` directory.
-   2. Paste `ha_neopool_mqtt_package.yaml` file or create a new one with that same name and paste contents inside. You would endup having this:
-
-      ![package directory screenshot](images/image.png)
-
-   3. Edit your `configuration.yaml` file and add the package adding this line in the `homeassistant`:
-      ```
-      packages: !include_dir_named packages
-      ```
-
-      you'll end up having something like this:
-
-      ![directory with file screenshot](images/image-1.png)
-    
-    4. Restart HA (recommended) or go to developer options and make a full reload.
-
+   Add `ha_neopool_mqtt_package.yaml` as [Home Assistant package](https://www.home-assistant.io/docs/configuration/packages/). Check [HA docs]((https://www.home-assistant.io/docs/configuration/packages/)) on how to configure HA for package usage.  
    This integration will not create a device, only entities. To check if the `ha_neopool_mqtt_package.yaml` is working, go to HA "Settings", "Devices & services", "Entities" and search for the entities "neopool_mqtt".
 5. **Home Assistant**  
    Add the [HACS (Home Assistant Community Store)](https://hacs.xyz/), if not already done.

@@ -479,6 +479,17 @@ mqtt:
       payload_available: "Online"
       payload_not_available: "Offline"
 
+    - unique_id: "neopool_mqtt_redox_tank_level"
+      name: "NeoPool MQTT Redox Tank Level"
+      device_class: problem
+      state_topic: "tele/SmartPool/SENSOR"
+      value_template: "{{ value_json.NeoPool.Redox.Tank }}"
+      payload_on: "0"
+      payload_off: "1"
+      availability_topic: "tele/SmartPool/LWT"
+      payload_available: "Online"
+      payload_not_available: "Offline"
+
     - unique_id: "neopool_mqtt_hydrolysis_cover"
       name: "NeoPool MQTT Hydrolysis Cover"
       state_topic: "tele/SmartPool/SENSOR"
