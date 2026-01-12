@@ -43,6 +43,18 @@ If the result is not the one you see above, you need to issue the command `Modul
 
 In case you don't use the provided `user_config_override.h` file, you'll need to follow the Manual Configuration Steps section below.
 
+## Wiring
+Devices supported by Tasmota NeoPool have an RS485 modbus2 port where the ESP device is plugged in.
+
+Pin mapping, top to bottom, from the [Tasmota Sugar Valley NeoPool page](https://tasmota.github.io/docs/NeoPool/):
+
+![wiring pin mapping table](images/image-5.png)
+
+
+This ports looks like this one (pic taken from a Hayward device) and thats how pins match:
+
+![wiring pin mapping in real pic](images/image-6.png)
+
 ## Configuration steps
 
 1. **Tasmota**  
@@ -126,10 +138,13 @@ In case you don't use the provided `user_config_override.h` file, you'll need to
    The lovelace UI yaml files here are extracted from the raw lovelace file. To use it edit the raw lovelace config within your HA Dashboard and paste the contents of one of the yaml file below the top word `views:`. Select one of the two possible lovelace files:
     - `ha_neopool_mqtt_lovelace.yaml` for pc/notebook display resolutions
     - `ha_neopool_mqtt_lovelace_responsive.yaml` using standard HA cards without resolution limitations
-<img src="https://raw.githubusercontent.com/alexdelprete/HA-NeoPool-MQTT/main/.media/install-lovelace.gif" alt="install lovelace" width="480"/>
+
+    <img src="https://raw.githubusercontent.com/alexdelprete/HA-NeoPool-MQTT/main/.media/install-lovelace.gif" alt="install lovelace" width="480"/>
 
 # Changelog
 
+- August 12, 2024:
+  - Adds documentation just for clarifying.
 - May 27, 2024:
   - Change pH tank level default device class as 'problem'
   - Change hydrolysis low production device class as 'problem'
