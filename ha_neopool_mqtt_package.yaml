@@ -477,7 +477,7 @@ mqtt:
       payload_available: "Online"
       payload_not_available: "Offline"
 
-    - unique_id: "neopool_mqtt_relay_Heating_state"
+    - unique_id: "neopool_mqtt_relay_heating_state"
       name: "NeoPool MQTT Relay Heating State"
       state_topic: "tele/SmartPool/SENSOR"
       value_template: "{{ value_json.NeoPool.Relay.Heating }}"
