@@ -13,7 +13,7 @@ see [`docs/TASMOTA_NEOPOOL_DRIVER_REFERENCE.md`](docs/TASMOTA_NEOPOOL_DRIVER_REF
 For the companion Python integration parity matrix,
 see [`docs/PARITY_WITH_INTEGRATION.md`](docs/PARITY_WITH_INTEGRATION.md).
 
-## [Unreleased] — 2026-05-26
+## [v5.0] — 2026-05-26
 
 ### Added
 
@@ -94,22 +94,15 @@ see [`docs/PARITY_WITH_INTEGRATION.md`](docs/PARITY_WITH_INTEGRATION.md).
 
 ## [v4.0] — 2026-03-23
 
-### Added (upstream)
-
 - 7 new **named relay binary sensors** for the functional-state of each
   named relay output: `Base`, `Redox`, `Chlorine`, `Conductivity`,
   `Heating`, `UV`, `Valve`. Each is only emitted by the firmware when its
   corresponding `MBF_PAR_*_GPIO` register is non-zero, so the HA entity
   goes `unavailable` automatically when the relay is not wired.
   Contributed by @curzon01 in commit `952328a`.
-
-### Changed
-
 - Version header bumped from `v3.5` to `v4.0`.
 
 ## [v3.5] — 2025-06-22
-
-### Added (upstream)
 
 - `neopool_mqtt_redox_tank_level` binary sensor (`NeoPool.Redox.Tank`).
   Requires Tasmota >= v15.0.1.1. Contributed by @curzon01 in commit
