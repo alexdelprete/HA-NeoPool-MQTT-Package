@@ -13,6 +13,34 @@ see [`docs/TASMOTA_NEOPOOL_DRIVER_REFERENCE.md`](docs/TASMOTA_NEOPOOL_DRIVER_REF
 For the companion Python integration parity matrix,
 see [`docs/PARITY_WITH_INTEGRATION.md`](docs/PARITY_WITH_INTEGRATION.md).
 
+## [Unreleased]
+
+### Fixed
+
+- **Hydrolysis percent display stuck at 0 / unavailable on older firmware.**
+  `sensor.neopool_mqtt_hydrolysis_data` (the `%` sensor) and
+  `number.neopool_mqtt_hydrolysis_setpoint` previously read
+  `NeoPool.Hydrolysis.Percent.{Data,Setpoint}`, which has two failure
+  modes:
+  1. The `Percent` sub-object was only added to Tasmota in
+     [arendst/Tasmota#19924](https://github.com/arendst/Tasmota/pull/19924)
+     (merged 2023-11-04). On older firmware the sub-object is absent and
+     the template renders nothing.
+  2. On newer firmware the value is computed as `data * 100 / max` using
+     C integer division (see
+     [`xsns_83_neopool.ino#L2195`](https://github.com/arendst/Tasmota/blob/development/tasmota/tasmota_xsns_sensor/xsns_83_neopool.ino#L2195)),
+     which truncates to 0 whenever current production is < 1 % of max
+     (e.g. `data=5, max=1000` → 0). Users on percent-display controllers
+     consistently saw the `%` sensor stuck at 0.
+
+  Fix: compute the percent in Jinja from `Hydrolysis.Data`,
+  `Hydrolysis.Unit` and `Hydrolysis.Max` (all always emitted, all
+  floats). When `Unit == "%"` the value is already a percent and is
+  passed through; when `Unit == "g/h"` and `Max > 0` we compute
+  `Data * 100 / Max` in floating point; otherwise fall back to
+  `Percent.Data`. Mirrors `_hydrolysis_percent_fn` in the companion
+  Python integration.
+
 ## [v5.0] — 2026-05-26
 
 ### Added

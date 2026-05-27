@@ -143,7 +143,20 @@ mqtt:
       icon: mdi:water-opacity
       state_class: measurement
       state_topic: "tele/SmartPool/SENSOR"
-      value_template: "{{ value_json.NeoPool.Hydrolysis.Percent.Data | round(0) }}"
+      # Compute percent from Data/Unit/Max instead of reading Percent.Data,
+      # which (a) is missing on Tasmota < Nov 2023 (arendst/Tasmota#19924) and
+      # (b) truncates to 0 in newer firmware when data*100 < max (C integer
+      # math). See _hydrolysis_percent_fn in the companion integration's
+      # sensor.py for the canonical algorithm.
+      value_template: >-
+        {% set h = value_json.NeoPool.Hydrolysis %}
+        {% if h.Unit == "%" %}
+          {{ h.Data | round(0) }}
+        {% elif h.Max and (h.Max | float) > 0 %}
+          {{ (h.Data | float * 100 / (h.Max | float)) | round(0) }}
+        {% elif h.Percent is defined %}
+          {{ h.Percent.Data | round(0) }}
+        {% endif %}
       availability_topic: "tele/SmartPool/SENSOR"
       availability_template: >-
         {% if value_json.NeoPool.Hydrolysis is defined and states('sensor.neopool_mqtt_system_model') != 'unavailable' %}
@@ -1015,7 +1028,19 @@ mqtt:
       step: 1
       mode: "slider"
       state_topic: "tele/SmartPool/SENSOR"
-      value_template: "{{ value_json.NeoPool.Hydrolysis.Percent.Setpoint }}"
+      # Same Percent.Setpoint truncation/missing-key issue as the
+      # hydrolysis_data sensor — compute from Setpoint/Unit/Max instead.
+      # command_template still sends "{value} %" because NPHydrolysis
+      # accepts that format regardless of the controller's display unit.
+      value_template: >-
+        {% set h = value_json.NeoPool.Hydrolysis %}
+        {% if h.Unit == "%" %}
+          {{ h.Setpoint | round(0) }}
+        {% elif h.Max and (h.Max | float) > 0 %}
+          {{ (h.Setpoint | float * 100 / (h.Max | float)) | round(0) }}
+        {% elif h.Percent is defined %}
+          {{ h.Percent.Setpoint | round(0) }}
+        {% endif %}
       command_topic: "cmnd/SmartPool/NPHydrolysis"
       command_template: "{{ value|string + ' %' }}"
       optimistic: false
