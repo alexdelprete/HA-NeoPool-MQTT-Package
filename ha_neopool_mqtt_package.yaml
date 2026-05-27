@@ -159,7 +159,10 @@ mqtt:
         {% endif %}
       availability_topic: "tele/SmartPool/SENSOR"
       availability_template: >-
-        {% if value_json.NeoPool.Hydrolysis is defined and states('sensor.neopool_mqtt_system_model') != 'unavailable' %}
+        {% set h = value_json.NeoPool.Hydrolysis %}
+        {% if h is defined
+          and h.Data is defined and h.Data is not none
+          and states('sensor.neopool_mqtt_system_model') != 'unavailable' %}
           Online
         {% else %}
           Offline
@@ -1047,7 +1050,10 @@ mqtt:
       retain: false
       availability_topic: "tele/SmartPool/SENSOR"
       availability_template: >-
-        {% if value_json.NeoPool.Hydrolysis is defined and states('sensor.neopool_mqtt_system_model') != 'unavailable' %}
+        {% set h = value_json.NeoPool.Hydrolysis %}
+        {% if h is defined
+          and h.Setpoint is defined and h.Setpoint is not none
+          and states('sensor.neopool_mqtt_system_model') != 'unavailable' %}
           Online
         {% else %}
           Offline

@@ -41,6 +41,18 @@ see [`docs/PARITY_WITH_INTEGRATION.md`](docs/PARITY_WITH_INTEGRATION.md).
   `Percent.Data`. Mirrors `_hydrolysis_percent_fn` in the companion
   Python integration.
 
+- **Tighter availability gate for the hydrolysis `%` sensor and
+  setpoint.** The previous `availability_template` only checked that
+  `NeoPool.Hydrolysis` was defined, so a transient telemetry payload
+  in which `Hydrolysis` exists but `Data` (or `Setpoint`) is
+  missing/null would silently render as `0` (because
+  `h.Data | float` coerces `None` to `0.0`). The gate now additionally
+  requires the specific field (`Data` for the sensor, `Setpoint` for
+  the number) to be defined and non-null — matching the integration's
+  `safe_float(..., None)` → `_attr_available = False` behavior.
+  Zero remains a valid measurement and stays `Online`; only
+  missing/null marks the entity unavailable.
+
 ## [v5.0] — 2026-05-26
 
 ### Added
