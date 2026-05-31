@@ -1,5 +1,23 @@
 # HA-NeoPool-MQTT
 
+> ## ⚠️ This project is archived — replaced by the Sugar Valley NeoPool HA integration
+>
+> **This YAML package is no longer maintained.** It has been **replaced by the
+> full Home Assistant custom integration**, which is more capable, far easier to
+> install (UI config flow + HACS, no manual package YAML), and is the **only**
+> version that will receive support and further development from now on.
+>
+> ### 👉 Move to the integration: <https://github.com/alexdelprete/ha-sugar-valley-neopool>
+>
+> From now on there will be **no more support, no bug fixes, and no further
+> development** in this repository — it is kept online read-only for reference
+> only.
+>
+> The integration provides an **automatic migration path** that preserves your
+> existing `neopool_mqtt_*` entity IDs and history, so moving over does not
+> break your dashboards or automations. It also ships ready-to-use Lovelace
+> dashboards equivalent to the ones here.
+
 [![GitHub Repository][repo-shield]][repo][![BuyMeCoffee][buymecoffee-shield]][buymecoffee][![Community Forum][forum-shield]][forum]
 
 Home Assistant MQTT integration for Tasmota NeoPool module (ESP32 and ESP8266 devices).
