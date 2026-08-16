@@ -116,8 +116,8 @@ in the project history (or re-derive by enumerating
 | `NeoPool.Relay.State[3..6]` (AUX1..4) | `neopool_mqtt_relay_aux1..4_state` | — (not present, integration uses switches) | package keeps for now to back the AUX switches |
 | `NeoPool.Relay.Acid` | `neopool_mqtt_relay_acid_state` | `relay_acid_state` | integration disables-by-default |
 | `NeoPool.Relay.Base`/`Redox`/`Chlorine`/`Conductivity`/`Heating`/`UV`/`Valve` | `neopool_mqtt_relay_<name>_state` | `relay_<name>_state` | integration disables-by-default per release notes; YAML cannot disable-by-default |
-| `NeoPool.pH.FL1` | `neopool_mqtt_ph_ctrl_fl1` | `ph_fl1` | naming differs |
-| `NeoPool.Hydrolysis.FL1` | `neopool_mqtt_hydrolysis_ctrl_fl1` | `hydrolysis_fl1` | naming differs |
+| `NeoPool.pH.FL1` | `neopool_mqtt_ph_ctrl_fl1` | `ph_fl1` | unique_id naming differs; both named "pH Flow Alarm" with device_class=problem (`1` = pH dosing blocked by flow detection; refs alexdelprete/ha-sugar-valley-neopool#23) |
+| `NeoPool.Hydrolysis.FL1` | `neopool_mqtt_hydrolysis_ctrl_fl1` | `hydrolysis_fl1` | unique_id naming differs; both named "Hydrolysis Flow Alarm" with device_class=problem (`1` = flow alarm, mirrors `State == "FLOW"`). The former inverted duplicate `neopool_mqtt_hydrolysis_ctrl_fl1_water_flow` ("Water Flow") was removed from both |
 | `NeoPool.pH.Tank` / `Redox.Tank` | `*_tank_level` | `*_tank_level` | both use device_class=problem; package uses `payload_on: "0"`, integration uses `invert=True` flag — semantically equivalent |
 | `NeoPool.Hydrolysis.Cover` / `.Low` | `hydrolysis_cover` / `_low_production` | `hydrolysis_cover` / `_low_production` | parity |
 | `NeoPool.Hydrolysis.Redox` | `neopool_mqtt_hydrolysis_redox_controlled` | `hydrolysis_redox_controlled` | parity — `1` if cell is redox-controlled |

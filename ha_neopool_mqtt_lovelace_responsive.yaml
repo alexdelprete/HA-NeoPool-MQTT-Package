@@ -155,9 +155,9 @@
                 icon: mdi:alert
                 name: Production Low
               - type: tile
-                entity: binary_sensor.neopool_mqtt_hydrolysis_water_flow
-                name: Water Flow
-                icon: mdi:waves-arrow-right
+                entity: binary_sensor.neopool_mqtt_hydrolysis_fl1
+                name: Flow Alarm
+                icon: mdi:water-alert
               - type: tile
                 entity: sensor.neopool_mqtt_hydrolysis_runtime_total
                 name: Runtime Total

@@ -13,6 +13,37 @@ see [`docs/TASMOTA_NEOPOOL_DRIVER_REFERENCE.md`](docs/TASMOTA_NEOPOOL_DRIVER_REF
 For the companion Python integration parity matrix,
 see [`docs/PARITY_WITH_INTEGRATION.md`](docs/PARITY_WITH_INTEGRATION.md).
 
+## [Unreleased]
+
+### Changed
+
+- **BREAKING: the "Water Flow" binary sensor was removed; the FL1 sensors
+  are now problem-class "Flow Alarm" entities.** Mirrors the same change in
+  the integration (refs
+  [alexdelprete/ha-sugar-valley-neopool#23](https://github.com/alexdelprete/ha-sugar-valley-neopool/issues/23),
+  thanks @deZeus89):
+  - `binary_sensor.neopool_mqtt_hydrolysis_water_flow`
+    (`neopool_mqtt_hydrolysis_ctrl_fl1_water_flow`) is **removed** — it was
+    an inverted duplicate of the same `Hydrolysis.FL1` bit behind
+    "Hydrolysis FL1", and its name wrongly suggested it tracked pump water
+    flow. `Hydrolysis.FL1` is the hydrolysis flow-detection alarm (`1` =
+    flow alarm, no flow detected), not the filtration state.
+  - "NeoPool MQTT pH FL1" → **"NeoPool MQTT pH Flow Alarm"** and
+    "NeoPool MQTT Hydrolysis FL1" → **"NeoPool MQTT Hydrolysis Flow
+    Alarm"**, both with `device_class: problem` (`on` = flow alarm active).
+    `pH.FL1` shares the hydrolysis polarity — verified empirically on a
+    live controller (both FL1 fields transition in lockstep within the same
+    SENSOR frames across flow-loss episodes). `unique_id`s are unchanged,
+    and `object_id` pins the historical entity_ids
+    (`binary_sensor.neopool_mqtt_ph_fl1` /
+    `binary_sensor.neopool_mqtt_hydrolysis_fl1`), so existing and new
+    installs keep identical entity_ids and migration to the integration is
+    unaffected.
+  - Both Lovelace dashboards updated accordingly. Update any automations
+    that referenced the removed entity, and note the inverted meaning: the
+    old "Water Flow" was `on` when flow was OK; the flow-alarm entities are
+    `on` when there is a problem.
+
 ## [v5.1] — 2026-05-26
 
 ### Fixed

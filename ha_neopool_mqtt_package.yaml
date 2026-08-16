@@ -667,8 +667,17 @@ mqtt:
       payload_available: "Online"
       payload_not_available: "Offline"
 
+    # pH.FL1: 1 = pH dosing blocked by flow detection (flow alarm), same
+    # polarity as Hydrolysis.FL1 — verified empirically on a live controller
+    # (both FL1 fields transition in lockstep within the same SENSOR frames).
+    # Canonical implementation: ph_fl1 in the integration's binary_sensor.py
+    # (alexdelprete/ha-sugar-valley-neopool). Refs
+    # alexdelprete/ha-sugar-valley-neopool#23.
+    # object_id pins the historical entity_id so renaming does not change it.
     - unique_id: "neopool_mqtt_ph_ctrl_fl1"
-      name: "NeoPool MQTT pH FL1"
+      name: "NeoPool MQTT pH Flow Alarm"
+      object_id: "neopool_mqtt_ph_fl1"
+      device_class: problem
       state_topic: "tele/SmartPool/SENSOR"
       value_template: "{{ value_json.NeoPool.pH.FL1 }}"
       payload_on: "1"
@@ -683,8 +692,16 @@ mqtt:
       payload_available: "Online"
       payload_not_available: "Offline"
 
+    # Hydrolysis.FL1: 1 = hydrolysis flow alarm, no flow detected (mirrors
+    # Hydrolysis.State == "FLOW"); it is NOT the filtration pump state.
+    # Canonical implementation: hydrolysis_fl1 in the integration's
+    # binary_sensor.py (alexdelprete/ha-sugar-valley-neopool). Refs
+    # alexdelprete/ha-sugar-valley-neopool#23.
+    # object_id pins the historical entity_id so renaming does not change it.
     - unique_id: "neopool_mqtt_hydrolysis_ctrl_fl1"
-      name: "NeoPool MQTT Hydrolysis FL1"
+      name: "NeoPool MQTT Hydrolysis Flow Alarm"
+      object_id: "neopool_mqtt_hydrolysis_fl1"
+      device_class: problem
       state_topic: "tele/SmartPool/SENSOR"
       value_template: "{{ value_json.NeoPool.Hydrolysis.FL1 }}"
       payload_on: "1"
@@ -699,22 +716,12 @@ mqtt:
       payload_available: "Online"
       payload_not_available: "Offline"
 
-    - unique_id: "neopool_mqtt_hydrolysis_ctrl_fl1_water_flow"
-      name: "NeoPool MQTT Hydrolysis Water Flow"
-      icon: mdi:air-filter
-      state_topic: "tele/SmartPool/SENSOR"
-      value_template: "{{ value_json.NeoPool.Hydrolysis.FL1 }}"
-      payload_on: "0"
-      payload_off: "1"
-      availability_topic: "tele/SmartPool/SENSOR"
-      availability_template: >-
-        {% if value_json.NeoPool.Hydrolysis is defined and states('sensor.neopool_mqtt_system_model') != 'unavailable' %}
-          Online
-        {% else %}
-          Offline
-        {% endif %}
-      payload_available: "Online"
-      payload_not_available: "Offline"
+    # NOTE: the former "NeoPool MQTT Hydrolysis Water Flow" entity
+    # (neopool_mqtt_hydrolysis_ctrl_fl1_water_flow) was removed: it was an
+    # inverted duplicate of Hydrolysis.FL1 whose name wrongly suggested it
+    # tracked pump water flow. Use the Hydrolysis Flow Alarm above (on =
+    # problem) or the filtration switch for pump state. Refs
+    # alexdelprete/ha-sugar-valley-neopool#23.
 
     - unique_id: "neopool_mqtt_ph_tank_level"
       name: "NeoPool MQTT pH Tank Level"
