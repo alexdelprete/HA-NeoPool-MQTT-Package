@@ -13,7 +13,7 @@ see [`docs/TASMOTA_NEOPOOL_DRIVER_REFERENCE.md`](docs/TASMOTA_NEOPOOL_DRIVER_REF
 For the companion Python integration parity matrix,
 see [`docs/PARITY_WITH_INTEGRATION.md`](docs/PARITY_WITH_INTEGRATION.md).
 
-## [Unreleased]
+## [v5.2] — 2026-08-16
 
 ### Changed
 
